@@ -1,0 +1,6 @@
+qwen-tts
+torch
+torchaudio
+soundfile
+numpy
+runpod
