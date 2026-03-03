@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Pre-download the Hugging Face models directly into the Docker image to prevent the 90-second timeout on cold starts.
+# This caches the heavy 7B model weights (15GB+) directly onto the container's SSD.
+RUN huggingface-cli download Qwen/Qwen2-Audio-7B-Instruct --exclude "*.pt" "*.h5" "*.msgpack"
+
 # Copy our serverless code
 COPY . .
 
