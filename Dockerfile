@@ -4,6 +4,8 @@ FROM pytorch/pytorch:2.1.0-cuda11.8-cudnn8-runtime
 WORKDIR /app
 
 # System dependencies for audio processing
+# ENV DEBIAN_FRONTEND is required to prevent tzdata from asking for timezone input and hanging the build forever.
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     libsndfile1 \
