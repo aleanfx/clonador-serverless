@@ -2,24 +2,7 @@ import runpod
 from config import get_model_id
 from tts_engine import engine
 
-def is_valid_auth(event) -> bool:
-    """Basic protection to prevent unauthorized usage of the endpoint."""
-    # We will enforce an environment variable API_AUTH_TOKEN
-    import os
-    expected_token = os.environ.get("API_AUTH_TOKEN", "")
-    if not expected_token: 
-        return True # If not set in RunPod, allow all (for testing)
-        
-    # RunPod passes HTTP headers natively in event.get('request', {}).get('headers', {}) -> However, direct invoke sometimes doesn't.
-    # The safest way for serverless is passing a secret in the JSON body.
-    input_data = event.get("input", {})
-    provided_token = input_data.get("api_key", "")
-    return provided_token == expected_token
-
 def handler(event):
-    if not is_valid_auth(event):
-        return {"error": "Unauthorized. Invalid api_key provided in input."}
-
     input_data = event.get("input", {})
     if not input_data:
         return {"error": "No input provided"}
